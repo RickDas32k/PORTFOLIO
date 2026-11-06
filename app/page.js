@@ -1,8 +1,9 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import Particles from "../components/Particles";
-import Counter from "../components/Counter";
-import MapBg from "../components/MapBg";
+import Scramble from "../components/Scramble";
+import Matrix from "../components/Matrix";
+import MapVideo from "../components/MapVideo";
 import { profile, stats, projects, matrix, socials } from "../lib/data";
 
 const focus = [
@@ -44,22 +45,24 @@ function Project({ p, i }) {
 
 export default function Home() {
   const [copied, setCopied] = useState(false);
-  const [open, setOpen] = useState(0);
   const [photoOk, setPhotoOk] = useState(true);
   const [active, setActive] = useState("");
   const bar = useRef(null), glow = useRef(null), photo = useRef(null);
 
   useEffect(() => {
-    const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), { threshold: 0.12 });
+    const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.dataset.in = "1"; io.unobserve(e.target); } }), { threshold: 0.12 });
     document.querySelectorAll(".rv").forEach((el) => io.observe(el));
     const so = new IntersectionObserver((es) => es.forEach((e) => e.isIntersecting && setActive(e.target.id)), { rootMargin: "-45% 0px -50% 0px" });
     links.forEach(([id]) => so.observe(document.getElementById(id)));
+    const hero = document.getElementById("top");
+    const ho = new IntersectionObserver(([e]) => hero.classList.toggle("off", !e.isIntersecting));
+    ho.observe(hero);
     const onScroll = () => {
       const h = document.documentElement;
       bar.current.style.transform = `scaleX(${h.scrollTop / (h.scrollHeight - h.clientHeight || 1)})`;
     };
     addEventListener("scroll", onScroll, { passive: true });
-    return () => { io.disconnect(); so.disconnect(); removeEventListener("scroll", onScroll); };
+    return () => { io.disconnect(); so.disconnect(); ho.disconnect(); removeEventListener("scroll", onScroll); };
   }, []);
 
   const still = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -81,7 +84,7 @@ export default function Home() {
 
   return (
     <>
-      <MapBg />
+      <MapVideo />
       <div className="progress" ref={bar} aria-hidden="true" />
       <nav className="nav" aria-label="Main">
         <a href="#top" className="logo">R.</a>
@@ -91,6 +94,7 @@ export default function Home() {
 
       <header id="top" className="hero" onPointerMove={heroMove}>
         <div className="glow" ref={glow} aria-hidden="true" />
+        <div className="ghost glow-t" aria-hidden="true"><span>PORTFOLIO</span></div>
         <div className="ghost" aria-hidden="true"><span>PORTFOLIO</span></div>
         {cursors.map(([n, c, l, t, d, s]) => (
           <div key={n} className="cur" style={{ left: l, top: t, "--c": c, "--d": s, "--m": d }} aria-hidden="true">
@@ -112,7 +116,7 @@ export default function Home() {
             <div className="photo" ref={photo}>
               {photoOk ? <img src="/rick.jpg" alt="Portrait of Rick Das" onError={() => setPhotoOk(false)} /> : <span className="initials">RD</span>}
               <i className="scan" aria-hidden="true" />
-              <i className="br tl" /><i className="br tr" /><i className="br bl" /><i className="br brr" /><em className="coord">27.33°N 88.60°E</em>
+              <i className="br tl" /><i className="br tr" /><i className="br bl" /><i className="br brr" /><em className="coord"><Scramble text="27.33°N 88.60°E" /></em>
               <figcaption><span className="dot" />OPERATOR // RICK DAS</figcaption>
             </div>
           </figure>
@@ -126,7 +130,7 @@ export default function Home() {
         </div>
         <dl className="stats">
           {stats.map(([n, l, s], i) => (
-            <div key={l} className="rv" style={{ "--i": i }}><dt><Counter value={n} /></dt><dd><b>{l}</b><br />{s}</dd></div>
+            <div key={l} className="rv" style={{ "--i": i }}><dt><Scramble text={n} /></dt><dd><b>{l}</b><br />{s}</dd></div>
           ))}
         </dl>
       </header>
@@ -134,7 +138,7 @@ export default function Home() {
       <div className="marquee" aria-hidden="true"><div>{[...tags, ...tags].map((t, i) => <span key={i}>{t}</span>)}</div></div>
 
       <section id="about" className="sec">
-        <span className="label rv">// 01.00 SEC_ABOUT_INDEX [01/04]</span>
+        <span className="label rv"><Scramble text="// 01.00 SEC_ABOUT_INDEX [01/04]" /></span>
         <h2 className="rv" style={{ "--i": 1 }}>Background &amp; philosophy</h2>
         <div className="about">
           <div>{profile.bio.map((t, i) => <p key={t} className="rv" style={{ "--i": i + 2 }}>{t}</p>)}</div>
@@ -143,39 +147,30 @@ export default function Home() {
       </section>
 
       <section id="projects" className="sec">
-        <span className="label rv">// 02.00 SEC_PROJECT_INDEX [02/04]</span>
+        <span className="label rv"><Scramble text="// 02.00 SEC_PROJECT_INDEX [02/04]" /></span>
         <h2 className="rv" style={{ "--i": 1 }}>Featured projects</h2>
         <div className="cards">{projects.map((p, i) => <Project key={p.title} p={p} i={i} />)}</div>
       </section>
 
-      <section id="matrix" className="sec">
-        <span className="label rv">// 03.00 SEC_MATRIX_INDEX [03/04]</span>
-        <h2 className="rv" style={{ "--i": 1 }}>The technology matrix</h2>
-        <div className="matrix">
-          {matrix.map(([g, ts], i) => (
-            <div key={g} className={"group rv" + (open === i ? " open" : "")} style={{ "--i": i % 4 }}>
-              <button aria-expanded={open === i} onClick={() => setOpen(open === i ? -1 : i)}>
-                <span>{g}</span><em>{ts.length}</em>
-              </button>
-              <div className="body"><div className="chips">{ts.map((t, k) => <span key={t} style={{ "--k": k }}>{t}</span>)}</div></div>
-            </div>
-          ))}
-        </div>
-      </section>
+      <Matrix />
 
       <section id="contact" className="sec contact">
         <Particles />
         <div className="contact-in">
-          <span className="label rv">// 04.00 SEC_CONTACT_INDEX [04/04]</span>
-          <h2 className="rv big" style={{ "--i": 1 }}>Let&apos;s build something that matters.</h2>
+          <span className="label rv"><Scramble text="// 04.00 SEC_CONTACT_INDEX [04/04]" /></span>
+          <h2 className="rv big" style={{ "--i": 1 }}><span>Let&apos;s build something</span><span>that matters.</span></h2>
           <p className="muted rv" style={{ "--i": 2 }}>Open to web, mobile, and AI projects, and to conversations about school technology.</p>
           <div className="cta rv" style={{ "--i": 3 }}>
             <a className="btn solid" href={`mailto:${profile.email}`}>{profile.email}</a>
             <button className="btn" onClick={copy}>{copied ? "Copied" : "Copy email"}</button>
+            <a className="btn" href="/resume.pdf" download="Rick-Das-Resume.pdf">Download resume</a>
           </div>
           <ul className="social rv" style={{ "--i": 4 }}>{socials.map(([n, u]) => <li key={n}><a href={u} target="_blank" rel="noreferrer">{n}</a></li>)}</ul>
         </div>
       </section>
+      <a className="fab" href="/resume.pdf" download="Rick-Das-Resume.pdf" aria-label="Download resume">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 3v12m0 0l-5-5m5 5l5-5M5 21h14" /></svg>Resume
+      </a>
       <footer className="foot">© 2026 Rick Das</footer>
     </>
   );

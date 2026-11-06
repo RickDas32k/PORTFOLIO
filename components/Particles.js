@@ -5,8 +5,8 @@ export default function Particles() {
   useEffect(() => {
     const c = ref.current, x = c.getContext("2d");
     const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
-    let w, h, raf, m = { x: -999, y: -999 };
-    const ps = Array.from({ length: 70 }, () => ({ a: Math.random() * 6.28, r: 30 + Math.random() * 120, s: 0.002 + Math.random() * 0.004, z: 1 + Math.random() * 2 }));
+    let w, h, raf = 0, on = false, m = { x: -999, y: -999 };
+    const ps = Array.from({ length: 60 }, () => ({ a: Math.random() * 6.28, r: 30 + Math.random() * 120, s: 0.002 + Math.random() * 0.004, z: 1 + Math.random() * 2 }));
     const size = () => { w = c.width = c.offsetWidth; h = c.height = c.offsetHeight; };
     const draw = () => {
       x.clearRect(0, 0, w, h);
@@ -18,11 +18,12 @@ export default function Particles() {
         x.fillStyle = p.z > 2.2 ? "#ff3b30" : "rgba(255,255,255,.55)";
         x.fillRect(px, py, p.z, p.z);
       });
-      if (!still) raf = requestAnimationFrame(draw);
+      raf = on && !still ? requestAnimationFrame(draw) : 0;
     };
+    const io = new IntersectionObserver(([e]) => { on = e.isIntersecting; if (on && !raf) raf = requestAnimationFrame(draw); });
     const mv = (e) => { const b = c.getBoundingClientRect(); m = { x: e.clientX - b.left, y: e.clientY - b.top }; };
-    size(); addEventListener("resize", size); c.addEventListener("pointermove", mv); draw();
-    return () => { cancelAnimationFrame(raf); removeEventListener("resize", size); };
+    size(); addEventListener("resize", size); c.addEventListener("pointermove", mv); io.observe(c); draw();
+    return () => { on = false; cancelAnimationFrame(raf); io.disconnect(); removeEventListener("resize", size); };
   }, []);
   return <canvas ref={ref} className="particles" aria-hidden="true" />;
 }
