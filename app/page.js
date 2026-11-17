@@ -47,6 +47,7 @@ export default function Home() {
   const [copied, setCopied] = useState(false);
   const [photoOk, setPhotoOk] = useState(true);
   const [active, setActive] = useState("");
+  const [resumeOpen, setResumeOpen] = useState(false);
   const bar = useRef(null), glow = useRef(null), photo = useRef(null);
 
   useEffect(() => {
@@ -64,6 +65,13 @@ export default function Home() {
     addEventListener("scroll", onScroll, { passive: true });
     return () => { io.disconnect(); so.disconnect(); ho.disconnect(); removeEventListener("scroll", onScroll); };
   }, []);
+
+  useEffect(() => {
+    const onKey = (e) => { if (e.key === "Escape") setResumeOpen(false); };
+    if (resumeOpen) { document.addEventListener("keydown", onKey); document.body.style.overflow = "hidden"; }
+    else { document.body.style.overflow = ""; }
+    return () => document.removeEventListener("keydown", onKey);
+  }, [resumeOpen]);
 
   const still = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
   const heroMove = (e) => {
@@ -164,6 +172,10 @@ export default function Home() {
             <a className="btn solid" href={`mailto:${profile.email}`}>{profile.email}</a>
             <button className="btn" onClick={copy}>{copied ? "Copied" : "Copy email"}</button>
             <a className="btn" href="/resume.pdf" download="Rick-Das-Resume.pdf">Download resume</a>
+              <button className="btn btn-eye" onClick={() => setResumeOpen(true)} aria-label="View resume">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                View
+              </button>
           </div>
           <ul className="social rv" style={{ "--i": 4 }}>{socials.map(([n, u]) => <li key={n}><a href={u} target="_blank" rel="noreferrer">{n}</a></li>)}</ul>
         </div>
@@ -171,6 +183,31 @@ export default function Home() {
       <a className="fab" href="/resume.pdf" download="Rick-Das-Resume.pdf" aria-label="Download resume">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 3v12m0 0l-5-5m5 5l5-5M5 21h14" /></svg>Resume
       </a>
+      <button className="fab fab-view" onClick={() => setResumeOpen(true)} aria-label="View resume">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+      </button>
+      {resumeOpen && (
+        <div className="resume-modal" role="dialog" aria-modal="true" aria-label="Resume preview" onClick={(e) => { if (e.target === e.currentTarget) setResumeOpen(false); }}>
+          <div className="resume-modal-box">
+            <div className="resume-modal-header">
+              <span className="resume-modal-title">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                Resume Preview
+              </span>
+              <div className="resume-modal-actions">
+                <a className="btn btn-sm" href="/resume.pdf" download="Rick-Das-Resume.pdf" aria-label="Download resume">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 3v12m0 0l-5-5m5 5l5-5M5 21h14"/></svg>
+                  Download
+                </a>
+                <button className="resume-modal-close" onClick={() => setResumeOpen(false)} aria-label="Close preview">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+              </div>
+            </div>
+            <iframe src="/resume.pdf" title="Resume PDF" className="resume-iframe" />
+          </div>
+        </div>
+      )}
       <footer className="foot">© 2026 Rick Das</footer>
     </>
   );
