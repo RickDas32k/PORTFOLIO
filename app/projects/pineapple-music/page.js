@@ -55,10 +55,32 @@ const highlights = [
   },
 ];
 
+const screenshots = [
+  "/screenshots/1.jpeg",
+  "/screenshots/2.jpeg",
+  "/screenshots/3.jpeg",
+  "/screenshots/4.jpeg",
+  "/screenshots/5.jpeg",
+  "/screenshots/6.jpeg",
+  "/screenshots/7.jpeg",
+  "/screenshots/8.jpeg",
+];
+
+const adVideos = [
+  { src: "/ads/PineApple-Music-Promo.mp4",  label: "PineApple Music — Official Promo" },
+  { src: "/ads/NikAmore-Features.mp4",       label: "NikAmore — Feature Showcase" },
+  { src: "/ads/nikamore-ad.mp4",             label: "NikAmore — Original Ad" },
+  { src: "/ads/nikamore-vs.mp4",             label: "NikAmore — Comparison Ad" },
+  { src: "/ads/LAST-1.mp4",                  label: "PineApple Music — Teaser 1" },
+  { src: "/ads/LAST-2.mp4",                  label: "PineApple Music — Teaser 2" },
+];
+
+const APK_URL = "https://github.com/RickDas32k/NikAmore/releases/download/v1.0.1/NikAmp-v1.0.1_arm64-v8a.apk";
+
 const timeline = [
-  { year: "2023", label: "NikAmore", desc: "Project conceived under the artist name NikAmp. Initial build shipped as NikAmore with package ID NikAmp, alongside a custom female-voice advertisement." },
-  { year: "2024", label: "PineApple Music", desc: "Rebranded to PineApple Music with a new visual identity, refined UI, and an updated pineapple-inspired icon system." },
-  { year: "2025+", label: "Ongoing", desc: "Continuous iteration on UI polish, feature additions, and performance improvements as a personal flagship Android project." },
+  { year: "Jun '26", label: "NikAmore — First Build", desc: "Project conceived and shipped under the name NikAmore (package ID: NikAmp). Launched with a custom female-voice advertisement created under the artist name NikAmp. The first working APK marked the beginning of a solo native Android journey." },
+  { year: "Oct '26", label: "PineApple Music — Rebrand", desc: "Full rebrand to PineApple Music with a fresh pineapple-inspired identity — new logo, icon system, colour palette, and refined frosted-glass UI. Version v1.0.1 released on GitHub with arm64-v8a APK support." },
+  { year: "Present", label: "Active Development", desc: "Ongoing iteration on UI polish, feature additions, and performance improvements. PineApple Music continues to evolve as a personal flagship Android project with a growing set of capabilities." },
 ];
 
 export default function PineAppleMusicPage() {
@@ -123,6 +145,14 @@ export default function PineAppleMusicPage() {
           <div className="cta l4">
             <a
               className="btn solid"
+              href={APK_URL}
+              download="NikAmp-v1.0.1_arm64-v8a.apk"
+            >
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 3v12m0 0l-5-5m5 5l5-5M5 21h14"/></svg>
+              Download the APK Now
+            </a>
+            <a
+              className="btn"
               href="https://github.com/RickDas32k/NikAmore"
               target="_blank"
               rel="noreferrer"
@@ -254,25 +284,26 @@ export default function PineAppleMusicPage() {
           <span className="label rv">// 05 — SCREENSHOTS</span>
           <h2 className="rv" style={{ "--i": 1 }}>App Screenshots</h2>
           <p className="pp-section-sub rv" style={{ "--i": 2 }}>
-            Visual walkthrough of the PineApple Music interface — screenshots coming soon.
+            Tap any screenshot to view it full size.
           </p>
           <div className="pp-screenshots-grid rv" style={{ "--i": 3 }}>
-            {[1, 2, 3, 4, 5, 6].map((n) => (
-              <div key={n} className="pp-screenshot-slot">
-                <div className="pp-phone-frame">
+            {screenshots.map((src, n) => (
+              <div key={src} className="pp-screenshot-slot">
+                <div className="pp-phone-frame" onClick={() => setLightbox({ src, type: "img" })} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") setLightbox({ src, type: "img" }); }} aria-label={`View screenshot ${n + 1}`}>
                   <div className="pp-phone-notch" />
-                  <div className="pp-screenshot-placeholder">
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" opacity="0.4"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
-                    <span>Screenshot {n}</span>
+                  <img
+                    src={src}
+                    alt={`PineApple Music screenshot ${n + 1}`}
+                    className="pp-screenshot-img"
+                    loading="lazy"
+                  />
+                  <div className="pp-screenshot-overlay">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
                   </div>
                 </div>
               </div>
             ))}
           </div>
-          <p className="pp-upload-hint rv" style={{ "--i": 4 }}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-            Screenshots of the APK will be uploaded here soon.
-          </p>
         </div>
       </section>
 
@@ -282,25 +313,34 @@ export default function PineAppleMusicPage() {
           <span className="label rv">// 06 — ADVERTISEMENT</span>
           <h2 className="rv" style={{ "--i": 1 }}>App Advertisement</h2>
           <p className="pp-section-sub rv" style={{ "--i": 2 }}>
-            Promotional videos and ads for PineApple Music — coming soon.
+            Promotional videos and ads created for PineApple Music and NikAmore. Tap to play full screen.
           </p>
           <div className="pp-ads-grid rv" style={{ "--i": 3 }}>
-            {[1, 2].map((n) => (
-              <div key={n} className="pp-ad-slot">
-                <div className="pp-ad-placeholder">
-                  <div className="pp-play-ring">
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            {adVideos.map((v, i) => (
+              <div key={v.src} className="pp-ad-slot">
+                <div className="pp-ad-card">
+                  <video
+                    src={v.src}
+                    className="pp-ad-video"
+                    muted
+                    loop
+                    playsInline
+                    preload="metadata"
+                    onMouseEnter={(e) => e.currentTarget.play()}
+                    onMouseLeave={(e) => { e.currentTarget.pause(); e.currentTarget.currentTime = 0; }}
+                  />
+                  <div className="pp-ad-overlay" onClick={() => setLightbox({ src: v.src, type: "video" })} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") setLightbox({ src: v.src, type: "video" }); }} aria-label={`Play ${v.label}`}>
+                    <div className="pp-play-ring">
+                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                    </div>
                   </div>
-                  <span className="pp-ad-label">Ad Video {n}</span>
-                  <span className="pp-ad-sub">Upload your promotional video here</span>
+                  <div className="pp-ad-info">
+                    <span className="pp-ad-label">{v.label}</span>
+                  </div>
                 </div>
               </div>
             ))}
           </div>
-          <p className="pp-upload-hint rv" style={{ "--i": 4 }}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-            Advertisement videos will be added here soon.
-          </p>
         </div>
       </section>
 
@@ -318,12 +358,20 @@ export default function PineAppleMusicPage() {
           <div className="cta rv" style={{ "--i": 4, justifyContent: "center" }}>
             <a
               className="btn solid"
+              href={APK_URL}
+              download="NikAmp-v1.0.1_arm64-v8a.apk"
+            >
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 3v12m0 0l-5-5m5 5l5-5M5 21h14"/></svg>
+              Download the APK Now
+            </a>
+            <a
+              className="btn"
               href="https://github.com/RickDas32k/NikAmore"
               target="_blank"
               rel="noreferrer"
             >
               <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.387.6.113.82-.258.82-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.09-.745.083-.729.083-.729 1.205.084 1.84 1.237 1.84 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.467-2.38 1.235-3.22-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.3 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.29-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.91 1.235 3.22 0 4.61-2.807 5.625-5.479 5.92.43.372.823 1.102.823 2.222v3.293c0 .322.218.694.825.576C20.565 21.796 24 17.298 24 12c0-6.63-5.37-12-12-12z"/></svg>
-              github.com/RickDas32k/NikAmore
+              GitHub Repository
             </a>
             <Link href="/#projects" className="btn">← Back to Projects</Link>
           </div>

@@ -3,9 +3,24 @@
 body{background:radial-gradient(1100px 600px at 80% -10%,#2a0b0a,transparent),var(--bg);color:var(--fg);font-family:var(--sans),system-ui,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 a{color:inherit;text-decoration:none}:focus-visible{outline:2px solid var(--cy);outline-offset:3px}
 .progress{position:fixed;inset:0 0 auto 0;height:2px;background:var(--red);transform:scaleX(0);transform-origin:left;z-index:30}
-.nav{position:fixed;top:14px;left:50%;transform:translateX(-50%);z-index:20;display:flex;gap:2px;align-items:center;padding:6px;border:1px solid var(--line);border-radius:999px;background:rgba(13,13,16,.93);font-size:.88rem;max-width:calc(100vw - 16px);overflow-x:auto;scrollbar-width:none;animation:drop .7s var(--out) both}
-.nav a{padding:6px 13px;border-radius:999px;color:var(--mut);white-space:nowrap;transition:color .16s ease,background-color .16s ease}
-.nav a.act{color:#fff;background:#ff3b3030}.nav .logo{background:var(--red);color:#fff;font-weight:700}.nav .pill{background:var(--fg);color:#000;font-weight:600}
+/* Nav — normal expanded state */
+.nav{position:fixed;top:14px;left:50%;transform:translateX(-50%);z-index:20;display:flex;gap:2px;align-items:center;padding:6px;border:1px solid var(--line);border-radius:999px;background:rgba(13,13,16,.93);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);font-size:.88rem;max-width:calc(100vw - 16px);overflow:hidden;scrollbar-width:none;animation:drop .7s var(--out) both;transition:width .45s cubic-bezier(0.34, 1.3, 0.64, 1),height .45s cubic-bezier(0.34, 1.3, 0.64, 1),padding .4s cubic-bezier(0.34, 1.3, 0.64, 1),border-radius .4s ease,background .3s ease,box-shadow .4s ease,border-color .3s ease,transform .25s ease}
+.nav a{padding:6px 13px;border-radius:999px;color:var(--mut);white-space:nowrap;transition:color .16s ease,background-color .16s ease,transform .2s ease}
+.nav a.act{color:#fff;background:#ff3b3030}.nav .logo{background:var(--red);color:#fff;font-weight:700;display:grid;place-items:center;transition:all .35s cubic-bezier(0.34, 1.3, 0.64, 1)}.nav .pill{background:var(--fg);color:#000;font-weight:600}
+
+/* Nav — collapsed Dynamic Island pill */
+.nav-links{display:flex;align-items:center;gap:2px;transition:opacity .22s ease,transform .25s cubic-bezier(0.34, 1.3, 0.64, 1)}
+.nav.nav-pill:not(.nav-open){width:44px;height:44px;padding:0;border-radius:999px;border-color:rgba(255,59,48,.5);background:rgba(10,10,13,.96);box-shadow:0 0 0 1px rgba(255,59,48,.4),0 8px 30px rgba(255,59,48,.35);cursor:pointer}
+.nav.nav-pill:not(.nav-open):hover{transform:translateX(-50%) scale(1.08);box-shadow:0 0 0 1.5px var(--red),0 10px 36px rgba(255,59,48,.5)}
+.nav.nav-pill:not(.nav-open) .nav-links{opacity:0;pointer-events:none;position:absolute;transform:scale(0.8)}
+.nav.nav-pill:not(.nav-open) .logo{width:100%;height:100%;padding:0;border-radius:999px;font-size:1.02rem;font-weight:800;letter-spacing:-0.02em}
+
+/* Nav — expanded from pill on click */
+.nav.nav-pill.nav-open{width:auto;height:auto;padding:6px;border-radius:999px;background:rgba(10,10,13,.97);box-shadow:0 0 0 1px var(--red),0 12px 40px rgba(0,0,0,.7)}
+.nav.nav-pill.nav-open .nav-links{opacity:1;pointer-events:auto;transform:scale(1);animation:fadein .22s ease both}
+.nav.nav-pill.nav-open .logo{width:auto;height:auto;padding:6px 13px;font-size:.88rem}
+
+@media(max-width:640px){.nav{font-size:.8rem}.nav a{padding:6px 10px}}
 .hero{position:relative;padding:100px var(--pad) 40px;overflow:hidden}
 .glow{position:absolute;left:0;top:0;width:600px;height:600px;border-radius:50%;background:radial-gradient(closest-side,rgba(255,59,48,.18),transparent);pointer-events:none;transition:transform .35s var(--out);will-change:transform}
 .ghost{position:absolute;left:0;right:0;top:64px;text-align:center;pointer-events:none;animation:wipe 1.3s var(--io) .1s both}

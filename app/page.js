@@ -52,6 +52,18 @@ function Project({ p, i }) {
       ) : (
         <ul>{items.map((x) => <li key={x}>{x}</li>)}</ul>
       )}
+      {p.title.includes("PineApple Music") && (
+        <div style={{ marginTop: "18px" }} onClick={(e) => e.stopPropagation()}>
+          <a
+            className="btn solid btn-sm"
+            href="https://github.com/RickDas32k/NikAmore/releases/download/v1.0.1/NikAmp-v1.0.1_arm64-v8a.apk"
+            download="NikAmp-v1.0.1_arm64-v8a.apk"
+          >
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 3v12m0 0l-5-5m5 5l5-5M5 21h14"/></svg>
+            Download the APK Now
+          </a>
+        </div>
+      )}
     </article>
   );
 }
@@ -61,7 +73,9 @@ export default function Home() {
   const [photoOk, setPhotoOk] = useState(true);
   const [active, setActive] = useState("");
   const [resumeOpen, setResumeOpen] = useState(false);
-  const bar = useRef(null), glow = useRef(null), photo = useRef(null);
+  const [scrolled, setScrolled] = useState(false);
+  const [navExpanded, setNavExpanded] = useState(false);
+  const bar = useRef(null), glow = useRef(null), photo = useRef(null), navRef = useRef(null);
 
   useEffect(() => {
     const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.dataset.in = "1"; io.unobserve(e.target); } }), { threshold: 0.12 });
@@ -74,9 +88,13 @@ export default function Home() {
     const onScroll = () => {
       const h = document.documentElement;
       bar.current.style.transform = `scaleX(${h.scrollTop / (h.scrollHeight - h.clientHeight || 1)})`;
+      setScrolled(h.scrollTop > 60);
     };
     addEventListener("scroll", onScroll, { passive: true });
-    return () => { io.disconnect(); so.disconnect(); ho.disconnect(); removeEventListener("scroll", onScroll); };
+    // close expanded nav on click-outside
+    const onDocClick = (e) => { if (navRef.current && !navRef.current.contains(e.target)) setNavExpanded(false); };
+    document.addEventListener("click", onDocClick);
+    return () => { io.disconnect(); so.disconnect(); ho.disconnect(); removeEventListener("scroll", onScroll); document.removeEventListener("click", onDocClick); };
   }, []);
 
   useEffect(() => {
@@ -107,10 +125,14 @@ export default function Home() {
     <>
       <MapVideo />
       <div className="progress" ref={bar} aria-hidden="true" />
-      <nav className="nav" aria-label="Main">
-        <a href="#top" className="logo">R.</a>
-        {links.map(([id, t]) => <a key={id} href={`#${id}`} className={active === id ? "act" : ""}>{t}</a>)}
-        <a href="#contact" className="pill">Get in touch</a>
+      <nav ref={navRef} className={`nav${scrolled ? " nav-pill" : ""}${navExpanded ? " nav-open" : ""}`} aria-label="Main">
+        {/* Pill mode: just the R. logo — click to expand */}
+        <a href="#top" className="logo" onClick={scrolled ? (e) => { e.preventDefault(); setNavExpanded(v => !v); } : undefined}>R.</a>
+        {/* Full links — hidden in pill mode unless expanded */}
+        <span className="nav-links">
+          {links.map(([id, t]) => <a key={id} href={`#${id}`} className={active === id ? "act" : ""} onClick={() => setNavExpanded(false)}>{t}</a>)}
+          <a href="#contact" className="pill" onClick={() => setNavExpanded(false)}>Get in touch</a>
+        </span>
       </nav>
 
       <header id="top" className="hero" onPointerMove={heroMove}>
