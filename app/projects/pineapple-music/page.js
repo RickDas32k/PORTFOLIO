@@ -85,7 +85,14 @@ const timeline = [
 
 export default function PineAppleMusicPage() {
   const bar = useRef(null);
+  const screensRef = useRef(null);
   const [lightbox, setLightbox] = useState(null); // { src, type: 'img'|'video' }
+
+  const scrollScreenshots = (dir) => {
+    if (screensRef.current) {
+      screensRef.current.scrollBy({ left: dir * 320, behavior: "smooth" });
+    }
+  };
 
   useEffect(() => {
     const io = new IntersectionObserver(
@@ -133,7 +140,13 @@ export default function PineAppleMusicPage() {
         <div className="pp-hero-inner">
           <span className="label l1">// PROJECT_INDEX [MOBILE_APP]</span>
           <div className="pp-title-wrap l2">
-            <span className="pp-icon-badge">🍍</span>
+            <div className="pp-logo-wrap">
+              <img
+                src="/pineapple-logo.png"
+                alt="PineApple Music Logo"
+                className="pp-logo-img"
+              />
+            </div>
             <div>
               <h1 className="pp-h1">PineApple Music</h1>
               <p className="pp-formerly">formerly <em>NikAmore</em></p>
@@ -281,28 +294,60 @@ export default function PineAppleMusicPage() {
       {/* Screenshots */}
       <section id="screenshots" className="sec pp-screenshots-sec">
         <div className="pp-container">
-          <span className="label rv">// 05 — SCREENSHOTS</span>
-          <h2 className="rv" style={{ "--i": 1 }}>App Screenshots</h2>
-          <p className="pp-section-sub rv" style={{ "--i": 2 }}>
-            Tap any screenshot to view it full size.
-          </p>
-          <div className="pp-screenshots-grid rv" style={{ "--i": 3 }}>
-            {screenshots.map((src, n) => (
-              <div key={src} className="pp-screenshot-slot">
-                <div className="pp-phone-frame" onClick={() => setLightbox({ src, type: "img" })} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") setLightbox({ src, type: "img" }); }} aria-label={`View screenshot ${n + 1}`}>
-                  <div className="pp-phone-notch" />
-                  <img
-                    src={src}
-                    alt={`PineApple Music screenshot ${n + 1}`}
-                    className="pp-screenshot-img"
-                    loading="lazy"
-                  />
-                  <div className="pp-screenshot-overlay">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+          <div className="pp-sec-head rv">
+            <div>
+              <span className="label">// 05 — SCREENSHOTS</span>
+              <h2 style={{ margin: "6px 0 10px" }}>App Screenshots</h2>
+              <p className="pp-section-sub">
+                Side-by-side walkthrough of the interface. Tap any screen to view full size.
+              </p>
+            </div>
+            <div className="pp-scroll-ctrls">
+              <button
+                type="button"
+                className="pp-ctrl-btn"
+                onClick={() => scrollScreenshots(-1)}
+                aria-label="Scroll left"
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+              </button>
+              <button
+                type="button"
+                className="pp-ctrl-btn"
+                onClick={() => scrollScreenshots(1)}
+                aria-label="Scroll right"
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+              </button>
+            </div>
+          </div>
+          <div className="pp-screenshots-viewport rv" style={{ "--i": 2 }}>
+            <div className="pp-screenshots-track" ref={screensRef}>
+              {screenshots.map((src, n) => (
+                <div key={src} className="pp-screenshot-slot">
+                  <div
+                    className="pp-phone-frame"
+                    onClick={() => setLightbox({ src, type: "img" })}
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") setLightbox({ src, type: "img" }); }}
+                    aria-label={`View screenshot ${n + 1}`}
+                  >
+                    <div className="pp-phone-notch" />
+                    <img
+                      src={src}
+                      alt={`PineApple Music screenshot ${n + 1}`}
+                      className="pp-screenshot-img"
+                      loading="lazy"
+                    />
+                    <div className="pp-screenshot-overlay">
+                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                    </div>
                   </div>
+                  <span className="pp-screen-caption">Screen 0{n + 1}</span>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </section>

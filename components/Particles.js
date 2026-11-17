@@ -21,9 +21,22 @@ export default function Particles() {
       raf = on && !still ? requestAnimationFrame(draw) : 0;
     };
     const io = new IntersectionObserver(([e]) => { on = e.isIntersecting; if (on && !raf) raf = requestAnimationFrame(draw); });
-    const mv = (e) => { const b = c.getBoundingClientRect(); m = { x: e.clientX - b.left, y: e.clientY - b.top }; };
-    size(); addEventListener("resize", size); c.addEventListener("pointermove", mv); io.observe(c); draw();
-    return () => { on = false; cancelAnimationFrame(raf); io.disconnect(); removeEventListener("resize", size); };
+    const mv = (e) => {
+      const b = c.getBoundingClientRect();
+      m = { x: e.clientX - b.left, y: e.clientY - b.top };
+    };
+    size();
+    addEventListener("resize", size);
+    window.addEventListener("pointermove", mv, { passive: true });
+    io.observe(c);
+    draw();
+    return () => {
+      on = false;
+      cancelAnimationFrame(raf);
+      io.disconnect();
+      removeEventListener("resize", size);
+      window.removeEventListener("pointermove", mv);
+    };
   }, []);
-  return <canvas ref={ref} className="particles" aria-hidden="true" />;
+  return <canvas ref={ref} className="particles" aria-hidden="true" style={{ pointerEvents: "none" }} />;
 }

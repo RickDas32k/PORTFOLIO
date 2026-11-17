@@ -40,7 +40,16 @@ function Project({ p, i }) {
           View Project
         </span>
       )}
-      <h3>{p.title}</h3>
+      <div style={{ display: "flex", alignItems: "center", gap: "12px", margin: "6px 0 8px" }}>
+        {p.title.includes("PineApple Music") && (
+          <img
+            src="/pineapple-logo.png"
+            alt="PineApple Music Logo"
+            style={{ width: "36px", height: "36px", borderRadius: "10px", objectFit: "cover", flexShrink: 0, boxShadow: "0 4px 14px rgba(255,59,48,0.35)", border: "1px solid rgba(255,255,255,0.1)" }}
+          />
+        )}
+        <h3 style={{ margin: 0 }}>{p.title}</h3>
+      </div>
       <p className="muted">{p.blurb}</p>
       <div className="tabs" role="tablist">
         {keys.map((k) => (
