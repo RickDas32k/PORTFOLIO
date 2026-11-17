@@ -1,10 +1,15 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import Particles from "../components/Particles";
 import Scramble from "../components/Scramble";
 import Matrix from "../components/Matrix";
 import MapVideo from "../components/MapVideo";
 import { profile, stats, projects, matrix, socials } from "../lib/data";
+
+const PROJECT_ROUTES = {
+  "PineApple Music (formerly NikAmore)": "/projects/pineapple-music",
+};
 
 const focus = [
   ["Web & app", "Websites and native Android apps, built end to end."],
@@ -24,14 +29,22 @@ function Project({ p, i }) {
   const keys = Object.keys(p.tabs);
   const [tab, setTab] = useState(keys[0]);
   const items = p.tabs[tab];
+  const router = useRouter();
+  const route = PROJECT_ROUTES[p.title];
   return (
-    <article className="card rv" style={{ "--i": i }}>
+    <article className={`card rv${route ? " card-linked" : ""}`} style={{ "--i": i }} onClick={route ? () => router.push(route) : undefined} role={route ? "button" : undefined} tabIndex={route ? 0 : undefined} onKeyDown={route ? (e) => { if (e.key === "Enter" || e.key === " ") router.push(route); } : undefined} aria-label={route ? `Open ${p.title} project page` : undefined}>
       <span className="label">{p.tag}</span>
+      {route && (
+        <span className="card-link-hint">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          View Project
+        </span>
+      )}
       <h3>{p.title}</h3>
       <p className="muted">{p.blurb}</p>
       <div className="tabs" role="tablist">
         {keys.map((k) => (
-          <button key={k} role="tab" aria-selected={k === tab} className={k === tab ? "on" : ""} onClick={() => setTab(k)}>{k}</button>
+          <button key={k} role="tab" aria-selected={k === tab} className={k === tab ? "on" : ""} onClick={(e) => { e.stopPropagation(); setTab(k); }}>{k}</button>
         ))}
       </div>
       {tab === "Stack" ? (
