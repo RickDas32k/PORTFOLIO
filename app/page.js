@@ -5,6 +5,7 @@ import Particles from "../components/Particles";
 import Scramble from "../components/Scramble";
 import Matrix from "../components/Matrix";
 import MapVideo from "../components/MapVideo";
+import ApkDownload from "../components/ApkDownload";
 import { profile, stats, projects, matrix, socials } from "../lib/data";
 
 const PROJECT_ROUTES = {
@@ -63,14 +64,7 @@ function Project({ p, i }) {
       )}
       {p.title.includes("PineApple Music") && (
         <div style={{ marginTop: "18px" }} onClick={(e) => e.stopPropagation()}>
-          <a
-            className="btn solid btn-sm"
-            href="https://github.com/RickDas32k/NikAmore/releases/download/v1.0.1/NikAmp-v1.0.1_arm64-v8a.apk"
-            download="NikAmp-v1.0.1_arm64-v8a.apk"
-          >
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 3v12m0 0l-5-5m5 5l5-5M5 21h14"/></svg>
-            Download the APK Now
-          </a>
+          <ApkDownload small />
         </div>
       )}
     </article>

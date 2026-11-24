@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Particles from "../../../components/Particles";
+import ApkDownload from "../../../components/ApkDownload";
 import "./page.css";
 
 const stack = [
@@ -75,11 +76,9 @@ const adVideos = [
   { src: "/ads/LAST-2.mp4",                  label: "PineApple Music — Teaser 2" },
 ];
 
-const APK_URL = "https://github.com/RickDas32k/NikAmore/releases/download/v1.0.1/NikAmp-v1.0.1_arm64-v8a.apk";
-
 const timeline = [
   { year: "Jun '26", label: "NikAmore — First Build", desc: "Project conceived and shipped under the name NikAmore (package ID: NikAmp). Launched with a custom female-voice advertisement created under the artist name NikAmp. The first working APK marked the beginning of a solo native Android journey." },
-  { year: "Oct '26", label: "PineApple Music — Rebrand", desc: "Full rebrand to PineApple Music with a fresh pineapple-inspired identity — new logo, icon system, colour palette, and refined frosted-glass UI. Version v1.0.1 released on GitHub with arm64-v8a APK support." },
+  { year: "Oct '26", label: "PineApple Music — Rebrand", desc: "Full rebrand to PineApple Music with a fresh pineapple-inspired identity — new logo, icon system, colour palette, and refined frosted-glass UI. Released on GitHub with arm64-v8a and universal APK builds." },
   { year: "Present", label: "Active Development", desc: "Ongoing iteration on UI polish, feature additions, and performance improvements. PineApple Music continues to evolve as a personal flagship Android project with a growing set of capabilities." },
 ];
 
@@ -156,14 +155,7 @@ export default function PineAppleMusicPage() {
             An ad-free, native Android music streaming application delivering a premium listening experience through a modern frosted-glass interface, powered by the YouTube Music backend.
           </p>
           <div className="cta l4">
-            <a
-              className="btn solid"
-              href={APK_URL}
-              download="NikAmp-v1.0.1_arm64-v8a.apk"
-            >
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 3v12m0 0l-5-5m5 5l5-5M5 21h14"/></svg>
-              Download the APK Now
-            </a>
+            <ApkDownload />
             <a
               className="btn"
               href="https://github.com/RickDas32k/NikAmore"
@@ -401,14 +393,7 @@ export default function PineAppleMusicPage() {
             The full project repository is available on GitHub. Explore the codebase, track the evolution from NikAmore to PineApple Music, and follow future updates.
           </p>
           <div className="cta rv" style={{ "--i": 4, justifyContent: "center" }}>
-            <a
-              className="btn solid"
-              href={APK_URL}
-              download="NikAmp-v1.0.1_arm64-v8a.apk"
-            >
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 3v12m0 0l-5-5m5 5l5-5M5 21h14"/></svg>
-              Download the APK Now
-            </a>
+            <ApkDownload />
             <a
               className="btn"
               href="https://github.com/RickDas32k/NikAmore"

@@ -165,3 +165,21 @@ blockquote{align-self:start;border-left:3px solid var(--red);padding:6px 0 6px 2
 .resume-modal-close:hover{color:var(--fg);background:rgba(255,255,255,.08)}
 .resume-modal-close:focus-visible{outline:2px solid var(--cy);outline-offset:2px}
 .resume-iframe{flex:1;width:100%;border:none;background:#fff}
+
+/* APK download popup */
+.apk-overlay{position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:18px;background:rgba(0,0,0,.72);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);animation:apkFade .2s ease both}
+.apk-modal{position:relative;width:min(460px,100%);padding:28px 24px 24px;border:1px solid var(--line);border-radius:16px;background:var(--panel);box-shadow:0 30px 90px rgba(0,0,0,.7),0 0 0 1px rgba(255,59,48,.18);animation:apkPop .3s var(--out) both}
+.apk-modal h3{margin:6px 0 4px;font-size:1.3rem}
+.apk-sub{font-size:.9rem;margin-bottom:18px}
+.apk-close{position:absolute;top:12px;right:12px;width:32px;height:32px;display:grid;place-items:center;border:1px solid var(--line);border-radius:50%;background:transparent;color:var(--mut);cursor:pointer}
+.apk-close:hover{color:var(--fg);border-color:var(--red)}
+.apk-options{display:grid;gap:10px}
+.apk-opt{display:flex;align-items:center;gap:14px;padding:14px 16px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.02);transition:border-color .16s ease,background-color .16s ease,transform .16s var(--out)}
+.apk-opt:first-child{border-color:rgba(255,59,48,.5);background:rgba(255,59,48,.08)}
+.apk-opt:hover{border-color:var(--red);background:rgba(255,59,48,.14);transform:translateY(-2px)}
+.apk-opt-ic{flex:none;width:38px;height:38px;display:grid;place-items:center;border-radius:10px;background:var(--red);color:#fff}
+.apk-opt-txt{display:grid;gap:2px}
+.apk-opt-txt b{font-size:.95rem}.apk-opt-txt em{font-style:normal;color:var(--mut);font-weight:400}
+.apk-opt-txt small{color:var(--mut);font-size:.78rem}
+@keyframes apkFade{from{opacity:0}to{opacity:1}}
+@keyframes apkPop{from{opacity:0;transform:translateY(14px) scale(.97)}to{opacity:1;transform:none}}
