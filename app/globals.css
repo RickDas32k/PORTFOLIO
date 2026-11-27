@@ -183,3 +183,9 @@ blockquote{align-self:start;border-left:3px solid var(--red);padding:6px 0 6px 2
 .apk-opt-txt small{color:var(--mut);font-size:.78rem}
 @keyframes apkFade{from{opacity:0}to{opacity:1}}
 @keyframes apkPop{from{opacity:0;transform:translateY(14px) scale(.97)}to{opacity:1;transform:none}}
+.foot{display:flex;flex-direction:column;align-items:center;gap:12px}
+.views-badge{display:inline-flex;align-items:center;gap:8px;padding:7px 14px;border-radius:999px;background:rgba(255,255,255,.03);border:1px solid var(--line);font-family:var(--mono);font-size:.74rem;letter-spacing:.06em;color:var(--mut);backdrop-filter:blur(8px)}
+.views-dot{width:7px;height:7px;border-radius:50%;background:#34d399;box-shadow:0 0 10px rgba(52,211,153,.75);animation:pulse 2s ease-in-out infinite}
+.views-label{color:var(--mut)}
+.views-count{color:var(--fg);font-weight:700;font-variant-numeric:tabular-nums}
+@media(prefers-reduced-motion:reduce){.views-dot{animation:none}}

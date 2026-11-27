@@ -6,6 +6,7 @@ import Scramble from "../components/Scramble";
 import Matrix from "../components/Matrix";
 import MapVideo from "../components/MapVideo";
 import ApkDownload from "../components/ApkDownload";
+import ViewsCounter from "../components/ViewsCounter";
 import { profile, stats, projects, matrix, socials } from "../lib/data";
 
 const PROJECT_ROUTES = {
@@ -246,7 +247,10 @@ export default function Home() {
           </div>
         </div>
       )}
-      <footer className="foot">© 2026 Rick Das</footer>
+      <footer className="foot">
+        <ViewsCounter />
+        <span>© 2026 Rick Das</span>
+      </footer>
     </>
   );
 }
