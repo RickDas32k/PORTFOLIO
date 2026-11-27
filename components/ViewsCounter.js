@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const SESSION_KEY = "rick_portfolio_viewed";
 const POLL_INTERVAL_MS = 10000;
@@ -7,6 +7,21 @@ const POLL_INTERVAL_MS = 10000;
 export default function ViewsCounter() {
   const [views, setViews] = useState(null);
   const [configured, setConfigured] = useState(true);
+  const [docked, setDocked] = useState(false);
+  const slotRef = useRef(null);
+
+  useEffect(() => {
+    const el = slotRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        setDocked(entry.isIntersecting);
+      },
+      { threshold: 0.1 }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
 
   useEffect(() => {
     let active = true;
@@ -66,24 +81,30 @@ export default function ViewsCounter() {
     views !== null ? views.toLocaleString("en-US") : configured ? "..." : "--";
 
   return (
-    <div className="views-badge" aria-live="polite" title={configured ? "Live website views" : "Upstash Redis not configured yet"}>
-      <span className="views-dot" aria-hidden="true" />
-      <svg
-        width="13"
-        height="13"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2.1"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        aria-hidden="true"
+    <div ref={slotRef} className="views-slot">
+      <div
+        className={`views-badge ${docked ? "views-badge-docked" : "views-badge-pinned"}`}
+        aria-live="polite"
+        title={configured ? "Live website views" : "Upstash Redis not configured yet"}
       >
-        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-        <circle cx="12" cy="12" r="3" />
-      </svg>
-      <span className="views-label">LIVE VIEWS</span>
-      <span className="views-count">{formatted}</span>
+        <span className="views-dot" aria-hidden="true" />
+        <svg
+          width="13"
+          height="13"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.1"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+          <circle cx="12" cy="12" r="3" />
+        </svg>
+        <span className="views-label">LIVE VIEWS</span>
+        <span className="views-count">{formatted}</span>
+      </div>
     </div>
   );
 }
